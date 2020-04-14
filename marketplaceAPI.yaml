@@ -1,0 +1,1864 @@
+openapi: 3.0.0
+info:
+  title: Advanced Flat Catalog
+  description: |
+    This is an API representation of the ideal product model.
+
+    **Note: All returned errors are json.**
+
+    **- Item: An individual SKU that represents a product or service.**
+
+    **- Bundle: An individual SKU that represents a product or service.**
+  version: 1.0.1
+servers:
+- url: https://virtserver.swaggerhub.com/LohmanCorp4/IDEALPRODUCT/1.0.1
+tags:
+- name: Customer Management
+  description: Functions to create, retrieve, and manage customers.
+- name: Product Catalog
+  description: Functions to retrieve SKUs in the catalog.
+- name: Order Management
+  description: Functions to create, retrieve, and manage orders of customers.
+- name: Subscription Management
+  description: Functions to create, retrieve, and manage orders of customers.
+paths:
+  /customers:
+    get:
+      tags:
+      - Customer Management
+      summary: List customers.
+      description: |
+        **Gets list of customers and their basic details in the system assigned to your tenant.**
+      operationId: getCustomers
+      parameters:
+      - name: offset
+        in: query
+        description: Page Index
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Pager size
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: tenantID
+        in: query
+        description: Id of the reseller or provider that created or owns the sku.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerID
+        in: query
+        description: Id of the customer in the system.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: externalCustomerID
+        in: query
+        description: Id of the customer in an external system.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: bcnID
+        in: query
+        description: BCN ID of the customer in an external system.  This is used to
+          link multiple accounts to a single billing contract.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerName
+        in: query
+        description: Name of customer
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerCity
+        in: query
+        description: City the customer is located in.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerCountry
+        in: query
+        description: Country the customer is located in.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerLanguage
+        in: query
+        description: Language the customer uses for the Control Panel and Notifications.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerType
+        in: query
+        description: Customer Status, (account, reseller, tenant, provider)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - account
+          - reseller
+          - tenant
+          - provider
+      - name: customerStatus
+        in: query
+        description: Customer Status, (pending, active, creditHold, adminHold, cancelled)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - pending
+          - active
+          - creditHold
+          - adminHold
+          - cancelled
+      responses:
+        "200":
+          description: List of catalog objects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/customer'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+    post:
+      tags:
+      - Customer Management
+      summary: Create a customer.
+      description: |
+        **Creates a customer in the system assigned to a tenant or reseller.**
+      operationId: createCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customer'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+  /customers/{customerID}:
+    get:
+      tags:
+      - Customer Management
+      summary: Get the details of a customer by customerID.
+      description: |
+        **Gets the extended details about the customer that is configured in the system.**
+      operationId: getCustomerByID
+      parameters:
+      - name: customerID
+        in: path
+        description: customerID of customer that needs to be operated with.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Page Index
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Pager size
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: tenantID
+        in: query
+        description: Id of the reseller or provider that created or owns the sku.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerID
+        in: query
+        description: Id of the customer in the system.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: externalCustomerID
+        in: query
+        description: Id of the customer in an external system.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: bcnID
+        in: query
+        description: BCN ID of the customer in an external system.  This is used to
+          link multiple accounts to a single billing contract.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerName
+        in: query
+        description: Name of customer
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerCity
+        in: query
+        description: City the customer is located in.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerCountry
+        in: query
+        description: Country the customer is located in.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerLanguage
+        in: query
+        description: Language the customer uses for the Control Panel and Notifications.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerType
+        in: query
+        description: Customer Status, (account, reseller, tenant, provider)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - account
+          - reseller
+          - tenant
+          - provider
+      - name: customerStatus
+        in: query
+        description: Customer Status, (pending, active, creditHold, adminHold, cancelled)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - pending
+          - active
+          - creditHold
+          - adminHold
+          - cancelled
+      responses:
+        "200":
+          description: List of catalog objects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/customer'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+    put:
+      tags:
+      - Customer Management
+      summary: Update a customer.
+      description: |
+        **Updates a customer in the system assigned to a tenant or reseller.**
+      operationId: updateCustomer
+      parameters:
+      - name: customerID
+        in: path
+        description: customerID of the customer that needs to be updated.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/customer'
+        required: true
+      responses:
+        "202":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+  /catalog:
+    get:
+      tags:
+      - Product Catalog
+      summary: Retrieves basic SKU catalog.
+      description: |
+        **Gets list of products and services available to a tenant for sell/resell with basic details included.**
+      operationId: getCatalog
+      parameters:
+      - name: offset
+        in: query
+        description: Page Index
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Pager size
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: tenantID
+        in: query
+        description: Id of the reseller or provider that created or owns the sku
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: skuName
+        in: query
+        description: Name of item/sku
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: skuID
+        in: query
+        description: SKU id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: mpnID
+        in: query
+        description: MPN id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: vendor
+        in: query
+        description: vendor id/name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: category
+        in: query
+        description: Category id/name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: currency
+        in: query
+        description: Currency code
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: taxID
+        in: query
+        description: Tax id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: skuTerm
+        in: query
+        description: sku term, (monthly, annual)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - monthly
+          - annual
+      - name: skuBilling
+        in: query
+        description: sku billing, (monthly, annual)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - monthly
+          - annual
+      - name: skuType
+        in: query
+        description: sku type, (item, bundle)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - item
+          - bundle
+      - name: searchTag
+        in: query
+        description: search criteria like O365, Office, Microsoft
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: versionSerial
+        in: query
+        description: Serial version of the sku.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/sku'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+  /catalog/details:
+    get:
+      tags:
+      - Product Catalog
+      summary: Retrieves detailed SKU catalog.
+      description: |
+        **Gets list of producs and services available to a tenant for sell/resell with extended details included.**
+      operationId: getExtendedCatalog
+      parameters:
+      - name: offset
+        in: query
+        description: Page Index
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Pager size
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: tenantID
+        in: query
+        description: Id of the reseller or provider that created or owns the sku
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: skuName
+        in: query
+        description: Name of item/sku
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: skuID
+        in: query
+        description: SKU id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: mpnID
+        in: query
+        description: MPN id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: vendor
+        in: query
+        description: vendor id/name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: category
+        in: query
+        description: Category id/name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: currency
+        in: query
+        description: Currency code
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: taxID
+        in: query
+        description: Tax id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: skuTerm
+        in: query
+        description: sku term, (monthly, annual)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - monthly
+          - annual
+      - name: skuBilling
+        in: query
+        description: sku billing, (monthly, annual)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - monthly
+          - annual
+      - name: skuType
+        in: query
+        description: sku type, (item, bundle)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - item
+          - bundle
+      - name: searchTag
+        in: query
+        description: |
+          **Search for SKUs based on common search terms**
+
+          Search criteria like O365, Office, Microsoft that would be associated with the product.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: skuVersion
+        in: query
+        description: "**Search for SKUs based on their serial number**\n\nExample\
+          \ - 2009010101\n\n*  YYYYMMDDXX Where XX is the change number on that day.\
+          \  \n* Change one is 01, change two is 02 \n"
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      - name: skuStatus
+        in: query
+        description: |
+          **Search for SKUs based on their status.**
+
+          * unpublished - SKU is in the system, but it is not published or available for net new sales.  Existing subscriptions can purchase additional quantitys.
+          * published - SKU is in the system and is available for sale.
+          * endOfSales - SKU is in the system, but it is not published or available for net new sales.  Existing subscriptions cannot purchase additional quantitys, but the subscription will continue to auto-renew.
+          * endOfLife - SKU is in the system, but it is not published or available for net new sales. SKUs in this status will not auto-renew and will expired if a transition SKU is not defined.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - unpublished
+          - published
+          - endOfSell
+          - endOfLife
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/skuDetails'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+  /catalog/{skuID}:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get extended details of a SKU
+      description: |
+        **Gets the extended details of a specific product based on skuID.**
+      operationId: getSkuDetails
+      parameters:
+      - name: skuID
+        in: path
+        description: skuID of sku that needs to be fetched
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Extended details of a catalog object.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/skuDetails'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "404":
+          description: Offer with skuID provided is not found!!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+  /catalog/{skuID}/activation:
+    get:
+      tags:
+      - Product Catalog
+      summary: Retrieves the extended information product and services catalog.
+      description: |
+        **Gets  activation parameters of a specific product based on skuID.**
+      operationId: getActivationParams
+      parameters:
+      - name: skuID
+        in: path
+        description: skuID of sku that needs to be fetched
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Extended activation details of a catalog object.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/activation'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "404":
+          description: Offer with skuID provided is not found!!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+    post:
+      tags:
+      - Product Catalog
+      summary: Validate a SKU activation parameter.
+      description: |
+        **Validates if provided parameters be accepted during order processing.**
+      operationId: validateActivationParams
+      parameters:
+      - name: skuID
+        in: path
+        description: skuID of sku that needs to be fetched
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/activation'
+        required: true
+      responses:
+        "200":
+          description: Validated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/activation'
+        "400":
+          description: Parameter could not validated with the provided value(s)!
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+  /orders:
+    get:
+      tags:
+      - Order Management
+      summary: List orders
+      description: |
+        **Gets the basic details of orders in the system.**
+      operationId: getOrders
+      parameters:
+      - name: offset
+        in: query
+        description: Page Index
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: Pager size
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: tenantID
+        in: query
+        description: tenantID of the tenant/reseller the customer belongs to.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerID
+        in: query
+        description: customerID of the customer that the order is for.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: customerName
+        in: query
+        description: Name of item/sku
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: skuID
+        in: query
+        description: SKU id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: mpnID
+        in: query
+        description: MPN id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: subscriptionID
+        in: query
+        description: subscription id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: vendorSubscriptionID
+        in: query
+        description: vendor subscription id
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: vendor
+        in: query
+        description: vendor id/name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: dateStart
+        in: query
+        description: Select orders on or after a date or used as the start of a date
+          range filter. YYYY-MM-DD HH:MM SS
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      - name: dateEnd
+        in: query
+        description: Select orders on or before a date or used as the end of a date
+          range filter. YYYY-MM-DD HH:MM SS
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date-time
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+    put:
+      tags:
+      - Order Management
+      summary: Update an order.
+      description: |
+        **Updates an order in the system for a customer that has not been completed.**
+
+        Notes:
+        * A customer must exist in the system.
+        * A user must exist on the customer's account.
+        * An order cannot be in completed status and further updated.
+        * Once an order is in completed status, please use the subscription methods.
+        * If you are using workflows or order approvals at the tenant level, set status to "approved".
+        * To cancel an entire order, set status to "cancelled", but this must be completed before status "complete".
+      operationId: updateOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/orderUpdate'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/orderUpdate'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+    post:
+      tags:
+      - Order Management
+      summary: Create an order.
+      description: |
+        **Creates an order in the system for a customer.**
+
+        Notes:
+        * A customer must exist in the system.
+        * A user must exist on the customer's account.
+      operationId: createOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+        "401":
+          description: not authorized!
+        "402":
+          description: Access to operation is forbidden!
+        "403":
+          description: Forbidden!
+        "500":
+          description: Internal error
+      security:
+      - UserSecurity: []
+components:
+  schemas:
+    customer:
+      required:
+      - customerAddress
+      - customerCity
+      - customerCountry
+      - customerName
+      - customerState
+      type: object
+      properties:
+        tenantID:
+          type: string
+          description: The identifier assigned to the customer account upon creation
+            and based on the context of the user making the request and their provider
+            membership.
+          format: uuid
+          readOnly: true
+          example: f05fa0f1-7ed2-4308-9dfa-9aa11a934dc1
+        customerID:
+          type: string
+          description: The identifier assigned to the customer account upon creation.  This
+            value is assigned automatically by the platform.
+          format: uuid
+          readOnly: true
+          example: f05fa0f1-7ed2-4308-9dfa-9aa11a934dc1
+        externalCustomerID:
+          type: string
+          description: This is the ID of the customer in an external system that is
+            integrated to the platform.
+          example: EXTERNAL-A1S2D3
+        bcnID:
+          type: string
+          description: This is the Billing Contract Number that is used when you need
+            to tie multiple accounts that are separated into a single billable account
+            in an external system.
+          example: EXTERNAL-A1S2D3
+        customerName:
+          type: string
+          description: This is the name of the business entity or the full name of
+            an individual for a personal account.
+          example: Acme Inc.
+        customerTaxID:
+          type: string
+          description: This is the tax ID that is used by the platform in tax calculation
+            and tax exemption.
+          example: US-A123456
+        customerAddress:
+          type: string
+          description: The street address of the customer.
+          example: 555 Main Street
+        customerAddressLine2:
+          type: string
+          description: This is secondary information for the address such as Apartment
+            or Suite number.
+          example: Suite 100
+        customerCity:
+          type: string
+          description: The city the customer resides in.
+          example: Irvine
+        customerState:
+          type: string
+          description: The state or province the customer resides in.
+          example: CA
+        customerCountry:
+          type: string
+          description: The country the customer resides in.
+          example: US
+        customerLanguage:
+          type: string
+          description: |
+            **This is the language the customer's notification and default language for control panel login.**
+
+            * en_US - US English
+            * de_DE - German
+            * es_ES - Spanish
+            * fr_FR - French
+            * it_IT - Italian
+            * ja_JP - Japanese
+            * ar_AE - Arabic
+            * nl_NL - Dutch
+            * pt_BR - Portugues (Brazil)
+          example: en_US
+          default: en_US
+          enum:
+          - en_US
+          - de_DE
+          - es_ES
+          - fr_FR
+          - it_IT
+          - ja_JP
+          - ar_AE
+          - nl_NL
+          - pt_BR
+        customerType:
+          type: string
+          description: |
+            **Defines the account type in the system.  Once set, this cannot be changed.**
+
+            * account - An end customer account used for purchasing services from a tenant, or reseller
+            * reseller - A customer that resells services to accounts.
+            * tenant - A multi-tenant customer that is a provider using the platform in PaaS.
+          example: account
+          default: account
+          enum:
+          - account
+          - reseller
+          - tenant
+        customerStatus:
+          type: string
+          description: |
+            The status of the customer's account in the platform.
+
+            * pending - The account has been added to the system, but has not been verified yet.
+            * active - The account is active in the system and able to order products and services.
+            * creditHold - The customer is active in the system, but not able to order additional products and services.  This is due to not paying outstanding balances for products and services provided.
+            * adminHold - The customer is not active in the system, not able to order additional products & services and all services are suspended.  This is due to violations of terms  of service or acceptable use policies.
+            * cancelled - The customer is not active in the system, no access to the control panel or services can be purchased, all services are stopped and with a zero balance.
+          example: active
+          default: account
+          enum:
+          - pending
+          - active
+          - creditHold
+          - adminHold
+          - cancelled
+        customerBilling:
+          type: string
+          description: |
+            This setting establishes when an account will be billed.
+
+            * dayOfMonth - Customer is billed for all subscriptions on a set day of the month that is manually defined.  Also set parameter customerBillingDay if this option is selected.
+            * bySubscription - Customer is billed for all subscriptions individually and on the calendar day of the month or year the subscriptions was started.
+          enum:
+          - dayOfMonth
+          - bySubscription
+    sku:
+      type: object
+      properties:
+        tenantID:
+          type: string
+          description: This is the ID of the owner of sku.
+          example: IMC-8VXPD7LI
+        skuName:
+          type: string
+          description: This is the name of the product or service.
+          example: Office 365 Enterprise E1
+        skuDescription:
+          type: string
+          example: The online versions of Office with email, instant messaging, HD
+            video conferencing, plus 1 TB personal file storage and sharing. Does
+            not include the Office suite for PC or Mac.
+        skuID:
+          type: string
+          description: The SKU assigned by the provider.
+          example: 91fd106f-4b2c-4938-95ac-f54f74e9a239
+        mpnID:
+          type: string
+          description: The MPN assigned by the vendor.
+          example: 95ac-f54f74e9a239
+        vendor:
+          type: string
+          example: Microsoft
+        category:
+          type: string
+          example: Productivity
+        unitPrice:
+          type: number
+          format: float
+          example: 6.4
+        unitListPrice:
+          type: number
+          format: double
+          example: 7.5
+        currency:
+          type: string
+          example: USD
+        taxID:
+          type: string
+          example: TAX-1
+        skuTerm:
+          type: string
+          example: monthly
+          enum:
+          - monthly
+          - annual
+        skuBilling:
+          type: string
+          example: monthly
+          enum:
+          - monthly
+          - annual
+        skuType:
+          type: string
+          example: item
+          default: item
+          enum:
+          - item
+          - bundle
+        searchTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/searchTags'
+        skuVersion:
+          type: number
+          example: 2019053101
+        skuStatus:
+          type: string
+          example: published
+          default: unpublished
+          enum:
+          - unpublished
+          - published
+          - endOfSell
+          - endOfLife
+    skuDetails:
+      type: object
+      properties:
+        minQuantity:
+          type: number
+          format: int32
+          example: 1
+        maxQuantity:
+          type: number
+          format: int32
+          example: 1000
+        availableQuantity:
+          type: number
+          format: int32
+          example: -1
+        tieredPricing:
+          allOf:
+          - $ref: '#/components/schemas/tieredPricing'
+        volumePricing:
+          allOf:
+          - $ref: '#/components/schemas/volumePricing'
+        dependsOn:
+          allOf:
+          - $ref: '#/components/schemas/dependsOn'
+        blockedBy:
+          allOf:
+          - $ref: '#/components/schemas/blockedBy'
+        blocks:
+          allOf:
+          - $ref: '#/components/schemas/blocks'
+        crossSales:
+          allOf:
+          - $ref: '#/components/schemas/crossSales'
+        upgrades:
+          allOf:
+          - $ref: '#/components/schemas/upgrades'
+        downgrades:
+          allOf:
+          - $ref: '#/components/schemas/downgrades'
+        activation:
+          type: array
+          items:
+            $ref: '#/components/schemas/activation'
+      allOf:
+      - $ref: '#/components/schemas/sku'
+    order:
+      required:
+      - customerID
+      - orderDetails
+      type: object
+      properties:
+        tenantID:
+          type: string
+          description: This is the ID of the reseller or tenant that owns the order.
+          readOnly: true
+          example: IMC-8VXPD7LI
+        orderID:
+          type: string
+          description: ID of the order in the system.
+          readOnly: true
+          example: IMC-8VXPD7LI-00000001
+        customerID:
+          type: string
+          description: This is the customerID that will receive the product or services.
+          format: uuid
+          example: f05fa0f1-7ed2-4308-9dfa-9aa11a934dc1
+        customerName:
+          type: string
+          description: The name of the customer that the order is for.
+          readOnly: true
+          example: Acme Inc.
+        poNumber:
+          type: string
+          description: PO number provided by the end customer.
+          example: PO1234
+        orderCreateDate:
+          type: string
+          description: Date the order was submitted by the tenant or reseller.
+          format: date-time
+          readOnly: true
+        orderDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/orderDetails'
+        orderTotalCost:
+          type: number
+          description: Total cost of the order to the reseller with tax.
+          format: float
+          readOnly: true
+          example: 55
+        orderTotalPrice:
+          type: number
+          description: Total price of the order to the end customer with tax.
+          format: float
+          readOnly: true
+          example: 59
+        orderTaxTotal:
+          type: number
+          description: Total tax of the order.
+          format: float
+          readOnly: true
+          example: 11.8
+        orderStatus:
+          type: string
+          description: Status of the order.
+          example: open
+          default: open
+          enum:
+          - draft
+          - open
+          - payment required
+          - payment failed
+          - credit hold
+          - awaiting approval
+          - processing
+          - error
+          - complete
+          - cancelled
+    orderDetails:
+      required:
+      - skuID
+      - skuQty
+      type: object
+      properties:
+        skuID:
+          type: string
+          description: SKU of the product or service that is being ordered.
+          example: 91fd106f-4b2c-4938-95ac-f54f74e9a239
+        skuName:
+          type: string
+          description: This is the name of the product or service.
+          readOnly: true
+          example: Office 365 Enterprise E1
+        skuQty:
+          type: number
+          description: The quanity of the SKU ordered.
+          format: int32
+          example: 10
+        unitCost:
+          type: number
+          description: The cost to tenant or reseller.
+          format: float
+          readOnly: true
+          example: 5.5
+        unitPrice:
+          type: number
+          description: The cost to tenant or reseller.
+          format: float
+          readOnly: true
+          example: 5.9
+        taxID:
+          type: string
+          description: Tax ID used for the calcuation of taxes.
+          readOnly: true
+          example: TAX-1
+        taxTotal:
+          type: number
+          description: Total tax due for the detail line item.
+          format: float
+          readOnly: true
+          example: 11.8
+        taxCharged:
+          type: boolean
+          description: Defines if the tenant or reseller was charged for tax.
+          readOnly: true
+          example: false
+        extendedCostTotal:
+          type: number
+          description: Total cost to the tenant or reseller (unitCost * skuQty + discounts),
+            but not inluding tax.
+          format: float
+          readOnly: true
+          example: 55
+        extendedPriceTotal:
+          type: number
+          description: Total price to the end customer account (unitPrice * skuQty
+            + discounts), but not inluding tax.
+          format: float
+          readOnly: true
+          example: 59
+        orderProvisionDate:
+          type: string
+          description: Date the order was provided (shipped or provisioned) by the
+            vendor.
+          format: date-time
+          readOnly: true
+        subscriptionID:
+          type: string
+          description: Subscription ID within the platform.
+          readOnly: true
+          example: IMC-123456A
+        vendorSubscriptionID:
+          type: string
+          description: Subscription ID within the vendor's system.
+          readOnly: true
+          example: e67918ac-56ed-47e9-acd8-258eef0c5a91
+        vendor:
+          type: string
+          description: The vendor that provides the product or service.
+          readOnly: true
+          example: Microsoft
+    orderUpdate:
+      type: object
+      properties:
+        tenantID:
+          type: string
+          description: This is the ID of the reseller or tenant that owns the order.
+          readOnly: true
+          example: IMC-8VXPD7LI
+        orderID:
+          type: string
+          description: ID of the order in the system.
+          readOnly: true
+          example: IMC-8VXPD7LI-00000001
+        customerID:
+          type: string
+          description: This is the customerID that will receive the product or services.
+          format: uuid
+          example: f05fa0f1-7ed2-4308-9dfa-9aa11a934dc1
+        customerName:
+          type: string
+          description: The name of the customer that the order is for.
+          readOnly: true
+          example: Acme Inc.
+        poNumber:
+          type: string
+          description: PO number provided by the end customer.
+          example: PO1234
+        orderCreateDate:
+          type: string
+          description: Date the order was submitted by the tenant or reseller.
+          format: date-time
+          readOnly: true
+        orderDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/orderDetailsUpdate'
+        orderTotalCost:
+          type: number
+          description: Total cost of the order to the reseller with tax.
+          format: float
+          readOnly: true
+          example: 27.5
+        orderTotalPrice:
+          type: number
+          description: Total price of the order to the end customer with tax.
+          format: float
+          readOnly: true
+          example: 29.5
+        orderTaxTotal:
+          type: number
+          description: Total tax of the order.
+          format: float
+          readOnly: true
+          example: 5.9
+        orderStatus:
+          type: string
+          description: Status of the order.
+          example: approved
+          default: open
+          enum:
+          - draft
+          - open
+          - payment required
+          - payment failed
+          - credit hold
+          - awaiting approval
+          - approved
+          - processing
+          - error
+          - complete
+          - cancelled
+    orderDetailsUpdate:
+      type: object
+      properties:
+        skuID:
+          type: string
+          description: SKU of the product or service that is being ordered.
+          example: 91fd106f-4b2c-4938-95ac-f54f74e9a239
+        skuName:
+          type: string
+          description: This is the name of the product or service.
+          readOnly: true
+          example: Office 365 Enterprise E1
+        skuQty:
+          type: number
+          description: The quanity of the SKU ordered. During put operations for orders
+            that have not been completed, a quantity of zero removes that line item.
+          format: int32
+          example: 5
+        unitCost:
+          type: number
+          description: The cost to tenant or reseller.
+          format: float
+          readOnly: true
+          example: 5.5
+        unitPrice:
+          type: number
+          description: The cost to tenant or reseller.
+          format: float
+          readOnly: true
+          example: 5.9
+        taxID:
+          type: string
+          description: Tax ID used for the calcuation of taxes.
+          readOnly: true
+          example: TAX-1
+        taxTotal:
+          type: number
+          description: Total tax due for the detail line item.
+          format: float
+          readOnly: true
+          example: 11.8
+        taxCharged:
+          type: boolean
+          description: Defines if the tenant or reseller was charged for tax.
+          readOnly: true
+          example: false
+        extendedCostTotal:
+          type: number
+          description: Total cost to the tenant or reseller (unitCost * skuQty + discounts),
+            but not inluding tax.
+          format: float
+          readOnly: true
+          example: 55
+        extendedPriceTotal:
+          type: number
+          description: Total price to the end customer account (unitPrice * skuQty
+            + discounts), but not inluding tax.
+          format: float
+          readOnly: true
+          example: 59
+        orderProvisionDate:
+          type: string
+          description: Date the order was provided (shipped or provisioned) by the
+            vendor.
+          format: date-time
+          readOnly: true
+        subscriptionID:
+          type: string
+          description: Subscription ID within the platform.
+          readOnly: true
+          example: IMC-123456A
+        vendorSubscriptionID:
+          type: string
+          description: Subscription ID within the vendor's system.
+          readOnly: true
+          example: e67918ac-56ed-47e9-acd8-258eef0c5a91
+        vendor:
+          type: string
+          description: The vendor that provides the product or service.
+          readOnly: true
+          example: Microsoft
+    subscription:
+      type: object
+      properties:
+        tenantID:
+          type: string
+          description: This is the ID of the reseller or tenant that owns the order.
+          readOnly: true
+          example: IMC-8VXPD7LI
+        orderID:
+          type: string
+          description: ID of the order in the system.
+          readOnly: true
+          example: IMC-8VXPD7LI-00000001
+        customerID:
+          type: string
+          description: This is the customerID that will receive the product or services.
+          format: uuid
+          example: f05fa0f1-7ed2-4308-9dfa-9aa11a934dc1
+        customerName:
+          type: string
+          description: The name of the customer that the order is for.
+          readOnly: true
+          example: Acme Inc.
+        subscriptionStartDate:
+          type: string
+          description: Date the order was submitted by the tenant or reseller.
+          format: date-time
+          readOnly: true
+        monthlyCost:
+          type: number
+          description: Monthly recurring cost (calculated)
+          readOnly: true
+          example: 25
+        monthlyPrice:
+          type: number
+          description: Monthly recurring price (calculated)
+          readOnly: true
+          example: 25
+        billingCycleDay:
+          type: number
+          description: Day of the month services is billed.
+          example: 19
+        subscriptionStatus:
+          type: string
+          description: Status of the order.
+          example: open
+          default: open
+          enum:
+          - draft
+          - open
+          - payment required
+          - payment failed
+          - credit hold
+          - awaiting approval
+          - processing
+          - error
+          - complete
+          - cancelled
+        autoRenew:
+          type: boolean
+          description: Defines the subscription auto-renew status.
+          example: true
+          default: true
+        subscriptionDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/orderDetails'
+    searchTags:
+      type: object
+      example: O365, Office, Microsoft
+    tieredPricing:
+      type: array
+      example:
+      - min: 1
+        max: 10
+        cost: 1.5
+        price: 2
+      - min: 11
+        max: 20
+        cost: 1.4
+        price: 1.9
+    volumePricing:
+      type: array
+      example:
+      - min: 1
+        max: 10
+        cost: 1.5
+        price: 2
+      - min: 11
+        max: 20
+        cost: 1.4
+        price: 1.9
+    dependsOn:
+      type: array
+      example:
+      - SKU1
+      - SKU2
+      - SKU3
+    blockedBy:
+      type: array
+      example:
+      - SKU1
+      - SKU2
+      - SKU3
+    blocks:
+      type: array
+      example:
+      - SKU1
+      - SKU2
+      - SKU3
+    crossSales:
+      type: array
+      example:
+      - SKU1
+      - SKU2
+      - SKU3
+    upgrades:
+      type: array
+      example:
+      - SKU1
+      - SKU2
+      - SKU3
+    downgrades:
+      type: array
+      example:
+      - SKU1
+      - SKU2
+      - SKU3
+    contact:
+      required:
+      - email
+      - firstName
+      - lastName
+      - phone
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: First name of the contact.
+          example: Jane
+        lastName:
+          type: string
+          description: Last name of the contact.
+          example: Doe
+        email:
+          type: string
+          description: Emaill address of the contact.
+          format: email
+          example: jane.doe@email.com
+        phone:
+          $ref: '#/components/schemas/contact_phone'
+    shippingAddress:
+      type: object
+      properties:
+        shippingAddress:
+          type: string
+          description: Address the SKU/product will be shipped to.
+          example: 555 Main St.
+        shippingAddress2:
+          type: string
+          description: Secondary line for address to input apartment and suite information.
+          example: Suite 100
+        shippingCity:
+          type: string
+          description: Address the SKU/product will be shipped to.
+          example: Irvine
+        shippingPostalCode:
+          type: string
+          description: Postal code the SKU/product will be shipped to.
+          example: "92612"
+        shippingState:
+          type: string
+          description: State/Province the SKU/product will be shipped to.
+          example: CA
+        shippingCountry:
+          type: string
+          description: Country the SKU/product will be shipped to.
+          example: US
+        shippingWeight:
+          type: number
+          description: Weight of the SKU/product that will be shipped.
+          format: int32
+          readOnly: true
+          example: 10
+        shippingUom:
+          type: string
+          description: Pounds (lb) or  Kilograms (kg)
+          readOnly: true
+          example: lb
+          enum:
+          - lb
+          - kg
+    activation:
+      required:
+      - parameterName
+      - parameterValue
+      type: object
+      properties:
+        skuID:
+          type: string
+          readOnly: true
+          example: f35a7b20-8c4e-429e-9d49-12095e262edd
+        vendor:
+          type: string
+          readOnly: true
+          example: Microsoft
+        parameterName:
+          type: string
+          example: onmicrosoft.com
+        parameterType:
+          type: string
+          readOnly: true
+          example: string
+        parameterRequired:
+          type: boolean
+          readOnly: true
+          example: true
+        parameterExample:
+          type: string
+          readOnly: true
+          example: acmeinc
+        parameterValidationURL:
+          type: string
+          readOnly: true
+          example: https://validate.vendor.com/someapi/somemethod
+        parameterValue:
+          type: string
+          writeOnly: true
+          example: acmeinc
+    contact_phone:
+      required:
+      - areaCode
+      - countryCode
+      - phoneNumber
+      type: object
+      properties:
+        countryCode:
+          type: number
+          description: Country code of the phone number contact.
+          format: int32
+          example: 1
+        areaCode:
+          type: number
+          description: Area code of the phone number contact.
+          format: int32
+          example: 800
+        phoneNumber:
+          type: string
+          description: "Phone number of the contact. \nAccepted formats 705-7057,\
+            \ 705.7057, 7057057\n"
+          example: 705-7057
+        phoneExt:
+          type: number
+          description: Phone extension of the contact
+          format: int32
+          example: 1234
+      description: Phone number of the contact.
+  securitySchemes:
+    UserSecurity:
+      type: apiKey
+      name: Authenticate
+      in: header
